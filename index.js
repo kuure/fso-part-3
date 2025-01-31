@@ -46,6 +46,23 @@ app.get('/info', (request, response) => {
 })
 
 
+// 3.3 single person by ID or 404
+app.get('/api/persons/:id', (request, response) => {
+
+	const person = persons.find(person => person.id === request.params.id)
+
+	if(person) {
+		response.json(person)
+	}
+	else {
+		response
+			.status(404)
+			.send("Four Oh Four")
+			.end()
+	}
+})
+
+
 
 
 
