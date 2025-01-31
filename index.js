@@ -33,6 +33,18 @@ app.get('/api/persons', (request, response) => {
 
 
 
+// 3.2 info 
+app.get('/info', (request, response) => {
+
+	const total = Object.keys(persons).length
+	const date = Date()
+
+	response.send(
+		`<p>Phonebook has info for ${total} people</p><p>${date}</p> `
+	)
+
+})
+
 
 
 
