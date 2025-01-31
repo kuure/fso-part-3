@@ -86,9 +86,20 @@ app.post('/api/persons/', (request, response) => {
 
 	if (!body.name) {
 		return response.status(400).json({
-			error: 'name missing'
+			error: "name missing"
 		})
 	}
+
+
+	// 3.6 find if there's already a person with the same name
+	const match = persons.find(person => person.name === body.name)
+
+	if (match) {
+		return response.status(400).json({
+			error: "name must be unique"
+		})
+	}
+	// end 3.6
 
 	const person = {
 		name: body.name,
@@ -101,9 +112,6 @@ app.post('/api/persons/', (request, response) => {
 	response.json(person)
 
 }) 
-
-
-
 
 
 
