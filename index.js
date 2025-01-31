@@ -57,13 +57,22 @@ app.get('/api/persons/:id', (request, response) => {
 	else {
 		response
 			.status(404)
-			.send("Four Oh Four")
+			.send(`Four Oh Four`)
 			.end()
 	}
 })
 
 
 
+// 3.4 delete person by id
+app.delete('/api/persons/:id', (request, response) => {
+	const id = request.params.id
+	persons = persons.filter(person => person.id !== id)
+	response
+		.status(204)
+		.send(`Deleted person with ID ${id}}`)
+		.end()
+}) 
 
 
 const port = 3001
