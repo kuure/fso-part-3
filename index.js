@@ -1,7 +1,49 @@
 const express = require('express')
+const morgan = require('morgan')
+
+
+
+// middleware
+const requestLogger = (request, response, next) => {
+	console.log('Method:', request.method)
+	console.log('Path:  ', request.path)
+	console.log('Body:  ', request.body)
+	console.log('---')
+	next()
+}
+
 const app = express()
 
 app.use(express.json())
+app.use(requestLogger)
+
+
+// 3.7
+app.use(morgan('tiny'))
+
+
+// 3.8 - define a new token with the POST 'body'
+morgan.token('body', req => {
+  return JSON.stringify(req.body)
+})
+
+// custom output with multiple tokens
+app.use(
+	morgan(function (tokens, req, res) {
+		return [
+			tokens.method(req, res),
+			tokens.url(req, res),
+			tokens.status(req, res),
+			tokens.body(req, res),
+			tokens.res(req, res, 'content-length'), '-',
+			tokens['response-time'](req, res), 'ms'
+		].join(' ')
+	})
+)
+
+
+
+
 
 let persons =  [
 	{ 
@@ -113,6 +155,20 @@ app.post('/api/persons/', (request, response) => {
 
 }) 
 
+
+
+// middleware
+const unknownEndpoint = (request, response) => {
+	response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+
+
+
+// 3.7
+app.use(morgan)
 
 
 const port = 3001
